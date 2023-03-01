@@ -4,25 +4,43 @@ from PIL import Image
 
 import streamlit as st
 
+model_name_or_path = 'alicelouis/VisLungTransformer'
+labels = ["adenocarcinoma","large.cell.carcinoma","normal","squamous.cell.carcinoma"]
 
-
-
-@st.cache_data
-def Loadmodel():
-    model_name_or_path = 'alicelouis/VisLungTransformer'
-#labels
-    labels = ["adenocarcinoma","large.cell.carcinoma","normal","squamous.cell.carcinoma"]
-#load model
+def modelVis(model_name_or_path):
     model = BeitForImageClassification.from_pretrained(
-    model_name_or_path,
-    num_labels=len(labels),
-    id2label={str(i): c for i, c in enumerate(labels)},
-    label2id={c: str(i) for i, c in enumerate(labels)}
-)
-#load fretureExtrator
-    feature_extractor = BeitFeatureExtractor.from_pretrained(model_name_or_path)
-    return model, feature_extractor
+        model_name_or_path,
+        num_labels=len(labels),
+        id2label={str(i): c for i, c in enumerate(labels)},
+        label2id={c: str(i) for i, c in enumerate(labels)})
+    return model
 
+def featureExtractor(model_name_or_path):
+    feature_extractor = BeitFeatureExtractor.from_pretrained(model_name_or_path)
+
+    return feature_extractor
+
+
+@st.cache(allow_output_mutation=True,show_spinner=False,ttl=1800,max_entries=2,persist=True)
+def load_model(): return modelVis(model_name_or_path)
+    
+
+@st.cache(hash_funcs={ BeitForImageClassification.from_pretrained(
+        model_name_or_path,
+        num_labels=len(labels),
+        id2label={str(i): c for i, c in enumerate(labels)},
+        label2id={c: str(i) for i, c in enumerate(labels)}): hash},
+                    allow_output_mutation=True,
+                    show_spinner=False,
+                    ttl=1800,
+                    max_entries=2,
+                    persist=True)
+
+def load_featureExtractor(): featureExtractor(model_name_or_path)
+
+
+    
+    
 
 # end def
 with st.sidebar:
@@ -54,6 +72,8 @@ st.markdown(hide_table_index, unsafe_allow_html=True)
 uploaded_file = st.file_uploader("อัปโหลดไฟล์ภาพ")
 
 if uploaded_file is not None:
+    model = load_model()
+    feature_extractor = load_featureExtractor()
     img = Image.open(uploaded_file)
     img_out = img
     img_out = np.array(img_out)
