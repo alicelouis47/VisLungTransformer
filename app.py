@@ -35,6 +35,8 @@ hide_table_index = """
             """ 
 st.markdown(hide_table_index, unsafe_allow_html=True)
 
+
+@st.cache
 #checkfile model
 if path.exists("model/optimizer.pt") == True:
     print("optimizer installed")
