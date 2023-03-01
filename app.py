@@ -8,9 +8,7 @@ import os
 
 import os.path
 from os import path
-from pathlib import Path
-from tqdm.auto import tqdm
-import requests
+import shutil
 
 
 with st.sidebar:
@@ -43,27 +41,32 @@ if path.exists("model/optimizer.pt") == True:
 else :
     #download model
     print("optimizer not installed")
-    urls = ["https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/optimizer.pt"]
-    output_dir = Path('model')
-    for url in tqdm(urls):
-        print(url)
-        filename = Path(url).name
-        response = requests.get(url)
-        output_dir.joinpath(filename).write_bytes(response.content)
-    
+    optimizer = "https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/optimizer.pt"
+    urllib.request.urlretrieve(optimizer,"optimizer.pt")
+    print("load optimizer")
 
+    listModel = ['optimizer.pt']
+
+    for i in range(len(listModel)):
+        print(listModel[i])
+        new_path = 'model/' + listModel[i]
+        shutil.move(listModel[i] , new_path)
+    
 if path.exists("model/pytorch_model.bin") == True:
     print("pytorch_model installed")
 else :
     #download model
     print("pytorch_model not installed")
-    urls = ["https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/pytorch_model.bin"]
-    output_dir = Path('model')
-    for url in tqdm(urls):
-        print(url)
-        filename = Path(url).name
-        response = requests.get(url)
-        output_dir.joinpath(filename).write_bytes(response.content)
+    pytorch_model = "https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/pytorch_model.bin"
+    urllib.request.urlretrieve(pytorch_model,"pytorch_model.bin")
+    print("load pytorch_model")
+
+    listModel = ['pytorch_model.bin']
+    for i in range(len(listModel)):
+        print(listModel[i])
+        new_path = 'model/' + listModel[i]
+        shutil.move(listModel[i] , new_path)
+    
 
 #model path
 model_name_or_path = "model"
