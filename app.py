@@ -6,23 +6,6 @@ import streamlit as st
 
 
 
-
-@st.cache_data
-def Loadmodel():
-    model_name_or_path = 'alicelouis/VisLungTransformer'
-#labels
-    labels = ["adenocarcinoma","large.cell.carcinoma","normal","squamous.cell.carcinoma"]
-#load model
-    model = BeitForImageClassification.from_pretrained(
-    model_name_or_path,
-    num_labels=len(labels),
-    id2label={str(i): c for i, c in enumerate(labels)},
-    label2id={c: str(i) for i, c in enumerate(labels)}
-)
-#load fretureExtrator
-    feature_extractor = BeitFeatureExtractor.from_pretrained(model_name_or_path)
-
-
 # end def
 with st.sidebar:
 
@@ -53,7 +36,19 @@ st.markdown(hide_table_index, unsafe_allow_html=True)
 uploaded_file = st.file_uploader("อัปโหลดไฟล์ภาพ")
 
 if uploaded_file is not None:
-    Loadmodel()
+    model_name_or_path = 'alicelouis/VisLungTransformer'
+#labels
+    labels = ["adenocarcinoma","large.cell.carcinoma","normal","squamous.cell.carcinoma"]
+#load model
+    model = BeitForImageClassification.from_pretrained(
+    model_name_or_path,
+    num_labels=len(labels),
+    id2label={str(i): c for i, c in enumerate(labels)},
+    label2id={c: str(i) for i, c in enumerate(labels)}
+)
+#load fretureExtrator
+    feature_extractor = BeitFeatureExtractor.from_pretrained(model_name_or_path)
+
     img = Image.open(uploaded_file)
     img_out = img
     img_out = np.array(img_out)
