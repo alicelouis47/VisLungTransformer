@@ -14,7 +14,7 @@ import shutil
 with st.sidebar:
 
     st.header("🖥️เกี่ยวกับโปรเจคนี้")
-    st.write("โปรเจคนี้อ้างอิงมากจากโครงงาน เว็บแอปพลิเคชั่นการคัดแยกโรคมะเร็งการเรียนรู้ถ่ายโอน Vision Transformer จัดทำโดย 1)นายภัคพล อาจบุราย 2)นายสันติภาพ ทองจันทร์ 3)นายณัฐวีร์ แนวกำพล อาจารย์ที่ปรึกษา นายเอกชัย วัฒนไชย ",unsafe_allow_html=True)
+    st.write("ยังไม่เสร็จ",unsafe_allow_html=True)
     
     st.header("🌐แหล่งอ้างอิง")
     st.write("ยังไม่เสร็จ")
@@ -42,15 +42,10 @@ else :
     #download model
     print("optimizer not installed")
     optimizer = "https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/optimizer.pt"
-    urllib.request.urlretrieve(optimizer,"optimizer.pt")
+    urllib.request.urlretrieve(optimizer,"model/optimizer.pt")
     print("load optimizer")
 
-    listModel = ['optimizer.pt']
 
-    for i in range(len(listModel)):
-        print(listModel[i])
-        new_path = 'model/' + listModel[i]
-        shutil.move(listModel[i] , new_path)
     
 if path.exists("model/pytorch_model.bin") == True:
     print("pytorch_model installed")
@@ -58,16 +53,9 @@ else :
     #download model
     print("pytorch_model not installed")
     pytorch_model = "https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/pytorch_model.bin"
-    urllib.request.urlretrieve(pytorch_model,"pytorch_model.bin")
+    urllib.request.urlretrieve(pytorch_model,"model/pytorch_model.bin")
     print("load pytorch_model")
-
-    listModel = ['pytorch_model.bin']
-    for i in range(len(listModel)):
-        print(listModel[i])
-        new_path = 'model/' + listModel[i]
-        shutil.move(listModel[i] , new_path)
     
-
 #model path
 model_name_or_path = "model"
 #labels
