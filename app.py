@@ -11,6 +11,31 @@ from os import path
 import shutil
 
 
+@st.cache
+
+def model_load():
+    if path.exists("model/optimizer.pt") == True:
+        print("optimizer installed")
+    else :
+    #download model
+        print("optimizer not installed")
+        optimizer = "https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/optimizer.pt"
+        urllib.request.urlretrieve(optimizer,"model/optimizer.pt")
+        print("load optimizer")
+
+
+    
+    if path.exists("model/pytorch_model.bin") == True:
+        print("pytorch_model installed")
+    else :
+    #download model
+        print("pytorch_model not installed")
+        pytorch_model = "https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/pytorch_model.bin"
+        urllib.request.urlretrieve(pytorch_model,"model/pytorch_model.bin")
+        print("load pytorch_model")
+
+model_load()
+# end def
 with st.sidebar:
 
     st.header("🖥️เกี่ยวกับโปรเจคนี้")
@@ -36,27 +61,7 @@ hide_table_index = """
 st.markdown(hide_table_index, unsafe_allow_html=True)
 
 
-@st.cache
-#checkfile model
-if path.exists("model/optimizer.pt") == True:
-    print("optimizer installed")
-else :
-    #download model
-    print("optimizer not installed")
-    optimizer = "https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/optimizer.pt"
-    urllib.request.urlretrieve(optimizer,"model/optimizer.pt")
-    print("load optimizer")
 
-
-    
-if path.exists("model/pytorch_model.bin") == True:
-    print("pytorch_model installed")
-else :
-    #download model
-    print("pytorch_model not installed")
-    pytorch_model = "https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/pytorch_model.bin"
-    urllib.request.urlretrieve(pytorch_model,"model/pytorch_model.bin")
-    print("load pytorch_model")
     
 #model path
 model_name_or_path = "model"
