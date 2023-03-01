@@ -1,7 +1,7 @@
-datasets==2.10.0
-huggingface-hub==0.12.0
-streamlit==1.19.0
-torch==1.13.1
-torchaudio==0.13.1
-torchvision==0.14.1
-transformers==4.26.1
+datasets
+huggingface-hub
+streamlit
+torch
+torchaudio
+torchvision
+transformers
