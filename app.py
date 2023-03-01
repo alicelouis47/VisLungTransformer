@@ -54,7 +54,6 @@ st.markdown(hide_table_index, unsafe_allow_html=True)
 uploaded_file = st.file_uploader("อัปโหลดไฟล์ภาพ")
 
 if uploaded_file is not None:
-    Loadmodel()
     img = Image.open(uploaded_file)
     img_out = img
     img_out = np.array(img_out)
