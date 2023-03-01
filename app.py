@@ -3,38 +3,26 @@ from transformers import BeitFeatureExtractor, BeitForImageClassification
 from PIL import Image
 
 import streamlit as st
-import urllib.request
-import os
-
-import os.path
-from os import path
-import shutil
 
 
-@st.cache
-
-def model_load():
-    if path.exists("model/optimizer.pt") == True:
-        print("optimizer installed")
-    else :
-    #download model
-        print("optimizer not installed")
-        optimizer = "https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/optimizer.pt"
-        urllib.request.urlretrieve(optimizer,"model/optimizer.pt")
-        print("load optimizer")
 
 
-    
-    if path.exists("model/pytorch_model.bin") == True:
-        print("pytorch_model installed")
-    else :
-    #download model
-        print("pytorch_model not installed")
-        pytorch_model = "https://huggingface.co/alicelouis/VisLungTransformer/resolve/main/checkpoint-1644/pytorch_model.bin"
-        urllib.request.urlretrieve(pytorch_model,"model/pytorch_model.bin")
-        print("load pytorch_model")
+@st.cache_data
+def Loadmodel():
+    model_name_or_path = 'alicelouis/VisLungTransformer'
+#labels
+    labels = ["adenocarcinoma","large.cell.carcinoma","normal","squamous.cell.carcinoma"]
+#load model
+    model = BeitForImageClassification.from_pretrained(
+    model_name_or_path,
+    num_labels=len(labels),
+    id2label={str(i): c for i, c in enumerate(labels)},
+    label2id={c: str(i) for i, c in enumerate(labels)}
+)
+#load fretureExtrator
+    feature_extractor = BeitFeatureExtractor.from_pretrained(model_name_or_path)
 
-model_load()
+
 # end def
 with st.sidebar:
 
@@ -61,29 +49,11 @@ hide_table_index = """
 st.markdown(hide_table_index, unsafe_allow_html=True)
 
 
-
     
-#model path
-model_name_or_path = "model"
-#labels
-labels = ["adenocarcinoma",
- "large.cell.carcinoma",
- "normal",
- "squamous.cell.carcinoma"]
-#load model
-model = BeitForImageClassification.from_pretrained(
-    model_name_or_path,
-    num_labels=len(labels),
-    id2label={str(i): c for i, c in enumerate(labels)},
-    label2id={c: str(i) for i, c in enumerate(labels)}
-)
-#load fretureExtrator
-feature_extractor = BeitFeatureExtractor.from_pretrained(model_name_or_path)
-
-
 uploaded_file = st.file_uploader("อัปโหลดไฟล์ภาพ")
 
 if uploaded_file is not None:
+    Loadmodel()
     img = Image.open(uploaded_file)
     img_out = img
     img_out = np.array(img_out)
